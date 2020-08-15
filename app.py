@@ -13,7 +13,7 @@ bot = Bot(ACCESS_TOKEN)
 @app.route('/', methods=['GET', 'POST'])
 def chat():
   if request.method == 'GET':
-    token_sent = request.args.get('hub.vertify_token')
+    token_sent = request.args.get('hub.verify_token')
     return vertify_token(token_sent)
   else:
     output = request.get_json()
@@ -28,6 +28,7 @@ def chat():
           if message['message'].get('attachments'):
             response_sent_nontext = get_message()
             send_message(recipient_id, response_sent_nontext)
+  return "Message Processed"
 
 
 @app.route('/test', methods=['GET'])
@@ -36,7 +37,7 @@ def test():
 
 def vertify_token(token):
   if token == VERIFY_TOKEN:
-    return request.args.get('hub.chellenge')
+    return request.args.get('hub.challenge')
   return 'Invalid Verification Token'
 
 def get_message():
