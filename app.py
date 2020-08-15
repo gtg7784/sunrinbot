@@ -29,6 +29,11 @@ def chat():
             response_sent_nontext = get_message()
             send_message(recipient_id, response_sent_nontext)
 
+
+@app.route('/test', methods=['GET'])
+def test():
+  return "HELLO WORLD"
+
 def vertify_token(token):
   if token == VERIFY_TOKEN:
     return request.args.get('hub.chellenge')
