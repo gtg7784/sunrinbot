@@ -57,12 +57,12 @@ def get_meal():
   neis = neispy.SyncClient(force=True)
 
   AE = "B10" # 교육청 코드
-  SE = 7021000 # 학교 코드
+  SE = 7010536 # 학교 코드
 
   date = datetime.now().strftime('%Y%m%d')
 
   try:
-    meal_info = neis.mealServiceDietInfo(ATPT_OFCDC_SC_CODE=AE, SD_SCHUL_CODE=SE, MLSV_YMD=202008)
+    meal_info = neis.mealServiceDietInfo(ATPT_OFCDC_SC_CODE=AE, SD_SCHUL_CODE=SE, MLSV_YMD=20200804)
     print(meal_info)
     return meal_info
   except Exception as error:
