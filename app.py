@@ -59,7 +59,7 @@ def send_message(recipient_id, response):
   bot.send_text_message(recipient_id, response)
   return "success"
 
-def get_meal(date, is_now=False):
+def get_meal(is_now=False):
   date = datetime.now().strftime('%Y%m%d')
 
   meal_info = neis.mealServiceDietInfo(AE, SE, MLSV_YMD=date)
