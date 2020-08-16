@@ -61,13 +61,12 @@ def get_meal():
 
   date = datetime.now().strftime('%Y%m%d')
 
-  meal_info = ""
-
   try:
     meal_info = neis.mealServiceDietInfo(ATPT_OFCDC_SC_CODE=AE, SD_SCHUL_CODE=SE)
-    return meal_info
-  except:
     print(meal_info)
+    return meal_info
+  except Exception as error:
+    print(error)
     return "해당 날짜의 급식정보가 없습니다"
 
 
