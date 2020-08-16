@@ -15,13 +15,6 @@ bot = Bot(ACCESS_TOKEN)
 
 SCHOOL_NAME = "선린인터넷고등학교"
 
-API_TOKEN = os.getenv('OPEN_API_TOKEN')
-neis = neispy.SyncClient(KEY=API_TOKEN)
-school_info = neis.schoolInfo(SCHUL_NM=SCHOOL_NAME)
-
-AE = school_info.ATPT_OFCDC_SC_CODE  # 교육청 코드
-SE = school_info.SD_SCHUL_COD # 학교 코드
-
 @app.route('/', methods=['GET', 'POST'])
 def chat():
   if request.method == 'GET':
@@ -59,12 +52,23 @@ def send_message(recipient_id, response):
   bot.send_text_message(recipient_id, response)
   return "success"
 
-def get_meal(is_now=False):
+def get_meal():
+  API_TOKEN = os.getenv('OPEN_API_TOKEN')
+  neis = neispy.SyncClient(KEY=API_TOKEN)
+
+  AE = 7021000 # 교육청 코드
+  SE = 7021000 # 학교 코드
+
   date = datetime.now().strftime('%Y%m%d')
 
-  meal_info = neis.mealServiceDietInfo(AE, SE, MLSV_YMD=date)
+  meal_info = ""
 
-  return meal_info
+  try:
+    meal_info = neis.mealServiceDietInfo(ATPT_OFCDC_SC_CODE=AE, SD_SCHUL_CODE=SE, MLSV_YMD=20200804)
+    return meal_info
+  except:
+    print(meal_info)
+    return "해당 날짜의 급식정보가 없습니다"
 
 
 if __name__ == "__main__":
