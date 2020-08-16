@@ -64,7 +64,7 @@ def get_meal():
   meal_info = ""
 
   try:
-    meal_info = neis.mealServiceDietInfo(ATPT_OFCDC_SC_CODE=AE, SD_SCHUL_CODE=SE, MLSV_YMD=20200804)
+    meal_info = neis.mealServiceDietInfo(ATPT_OFCDC_SC_CODE=AE, SD_SCHUL_CODE=SE)
     return meal_info
   except:
     print(meal_info)
