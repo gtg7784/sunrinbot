@@ -28,7 +28,7 @@ def chat():
         if message.get('message'):
           recipient_id = message['sender']['id']
           if message['message'].get('text'):
-            response_sent_text = get_meal(is_now=True)
+            response_sent_text = get_meal()
             send_message(recipient_id, response_sent_text)
           if message['message'].get('attachments'):
             response_sent_nontext = "attach"
