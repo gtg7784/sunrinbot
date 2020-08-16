@@ -1,6 +1,6 @@
 import os
-import datetime
 import neispy
+from datetime import datetime
 from flask import Flask, request
 from dotenv import load_dotenv
 from pymessenger.bot import Bot
@@ -60,8 +60,7 @@ def send_message(recipient_id, response):
   return "success"
 
 def get_meal(date, is_now=False):
-  if is_now:
-    date = datetime.now().strftime('%Y%m%d')
+  date = datetime.now().strftime('%Y%m%d')
 
   meal_info = neis.mealServiceDietInfo(AE, SE, MLSV_YMD=date)
 
