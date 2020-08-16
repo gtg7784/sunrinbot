@@ -54,15 +54,15 @@ def send_message(recipient_id, response):
 
 def get_meal():
   API_TOKEN = os.getenv('OPEN_API_TOKEN')
-  neis = neispy.SyncClient(KEY=API_TOKEN)
+  neis = neispy.SyncClient(force=True)
 
-  AE = 7021000 # 교육청 코드
+  AE = "B10" # 교육청 코드
   SE = 7021000 # 학교 코드
 
   date = datetime.now().strftime('%Y%m%d')
 
   try:
-    meal_info = neis.mealServiceDietInfo(ATPT_OFCDC_SC_CODE=AE, SD_SCHUL_CODE=SE)
+    meal_info = neis.mealServiceDietInfo(ATPT_OFCDC_SC_CODE=AE, SD_SCHUL_CODE=SE, MLSV_YMD=202008)
     print(meal_info)
     return meal_info
   except Exception as error:
