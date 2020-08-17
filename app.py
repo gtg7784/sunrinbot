@@ -96,7 +96,7 @@ def get_schedule(date=None):
 
   try:
     if date:
-      schedule_info = neis.SchoolSchedule(ATPT_OFCDC_SC_CODE=AE, SD_SCHUL_CODE=SE, MLSV_YMD=date)
+      schedule_info = neis.SchoolSchedule(ATPT_OFCDC_SC_CODE=AE, SD_SCHUL_CODE=SE, AA_YMD=date)
     else:
       schedule_info = neis.SchoolSchedule(ATPT_OFCDC_SC_CODE=AE, SD_SCHUL_CODE=SE)
 
