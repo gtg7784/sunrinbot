@@ -1,6 +1,5 @@
 import os
 import neispy
-from datetime import datetime
 from flask import Flask, request
 from dotenv import load_dotenv
 from pymessenger.bot import Bot
@@ -29,7 +28,7 @@ def chat():
           recipient_id = message['sender']['id']
           if message['message'].get('text'):
             text = message['message'].get('text')
-            response_sent_text = choice_message()
+            response_sent_text = choice_message(text)
             send_message(recipient_id, response_sent_text)
           if message['message'].get('attachments'):
             response_sent_nontext = "attach"
@@ -113,7 +112,6 @@ def get_timetable(date=None, grade_no=1, class_no=1):
     if date:
       timetable_info = neis.timeTable(schclass='his', ATPT_OFCDC_SC_CODE=AE, SD_SCHUL_CODE=SE, ALL_TI_YMD=date, GRADE=grade_no, CLASS_NM=class_no)
     else:
-      now = datetime.now().strftime("%Y%M%d")
       timetable_info = neis.timeTable(schclass='his', ATPT_OFCDC_SC_CODE=AE, SD_SCHUL_CODE=SE, GRADE=grade_no, CLASS_NM=class_no)
 
     timetable = [i['ITRT_CNTNT'] for i in timetable_info.data]
