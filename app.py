@@ -28,7 +28,8 @@ def chat():
         if message.get('message'):
           recipient_id = message['sender']['id']
           if message['message'].get('text'):
-            response_sent_text = get_meal()
+            text = message['message'].get('text')
+            response_sent_text = choice_message()
             send_message(recipient_id, response_sent_text)
           if message['message'].get('attachments'):
             response_sent_nontext = "attach"
@@ -45,30 +46,81 @@ def vertify_token(token):
   return 'Invalid Verification Token'
 
 
-def choice_message(text):
-  selections = ['급식', ]
+def choice_message(text=""):
+  selections = ['급식', '학사일정', '시간표']
+  result = ''
+
+  for i in selections:
+    if i in text:
+      result = i
+
+  if result == '급식':
+    return get_meal()
+  elif result == '학사일정':
+    return get_schedule()
+  elif result == '시간표':
+    return get_timetable(date=20200804)
+
 
 def send_message(recipient_id, response):
   bot.send_text_message(recipient_id, response)
   return "success"
 
-def get_meal():
-  API_TOKEN = os.getenv('OPEN_API_TOKEN')
+def get_meal(date=None):
   neis = neispy.SyncClient(force=True)
 
   AE = "B10" # 교육청 코드
   SE = 7010536 # 학교 코드
 
-  date = datetime.now().strftime('%Y%m%d')
-
   try:
-    meal_info = neis.mealServiceDietInfo(ATPT_OFCDC_SC_CODE=AE, SD_SCHUL_CODE=SE, MLSV_YMD=20200804)
-    print(meal_info)
-    return meal_info
-  except Exception as error:
-    print(error)
+    if date:
+      meal_info = neis.mealServiceDietInfo(ATPT_OFCDC_SC_CODE=AE, SD_SCHUL_CODE=SE, MLSV_YMD=date)
+    else:
+      meal_info = neis.mealServiceDietInfo(ATPT_OFCDC_SC_CODE=AE, SD_SCHUL_CODE=SE)
+
+    meal = meal_info.DDISH_NM.replace('<br/>', '\n')
+    return meal
+  except Exception as err:
+    print(err)
     return "해당 날짜의 급식정보가 없습니다"
 
+def get_schedule(date=None):
+  neis = neispy.SyncClient(force=True)
+
+  AE = "B10" # 교육청 코드
+  SE = 7010536 # 학교 코드
+
+  try:
+    if date:
+      schedule_info = neis.SchoolSchedule(ATPT_OFCDC_SC_CODE=AE, SD_SCHUL_CODE=SE, MLSV_YMD=date)
+    else:
+      schedule_info = neis.SchoolSchedule(ATPT_OFCDC_SC_CODE=AE, SD_SCHUL_CODE=SE)
+
+    schedule = schedule_info.EVENT_NM
+
+    return schedule
+  except Exception as err:
+    print(err)
+    return "해당 날짜의 학사일정 정보가 없습니다"
+
+def get_timetable(date=None, grade_no=1, class_no=1):
+  neis = neispy.SyncClient(force=True)
+
+  AE = "B10" # 교육청 코드
+  SE = 7010536 # 학교 코드
+
+  try:
+    if date:
+      timetable_info = neis.timeTable(schclass='his', ATPT_OFCDC_SC_CODE=AE, SD_SCHUL_CODE=SE, ALL_TI_YMD=date, GRADE=grade_no, CLASS_NM=class_no)
+    else:
+      now = datetime.now().strftime("%Y%M%d")
+      timetable_info = neis.timeTable(schclass='his', ATPT_OFCDC_SC_CODE=AE, SD_SCHUL_CODE=SE, GRADE=grade_no, CLASS_NM=class_no)
+
+    timetable = [i['ITRT_CNTNT'] for i in timetable_info.data]
+    return timetable
+  except Exception as err:
+    print(err)
+    return "해당 날짜의 시간표 정보가 없습니다"
 
 if __name__ == "__main__":
   app.run(host='0.0.0.0', port=80)
