@@ -50,10 +50,9 @@ def choice_message(text=""):
     '급식': get_meal(date=20200804),
     '학사일정': get_schedule(date=20200804),
     '시간표': get_timetable(date=20200804),
-    'notselected': ''
   }
 
-  result = 'notselected'
+  result = ''
 
   for i in selections:
     if i in text:
