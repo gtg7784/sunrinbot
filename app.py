@@ -46,19 +46,24 @@ def vertify_token(token):
 
 
 def choice_message(text=""):
-  selections = ['급식', '학사일정', '시간표']
-  result = ''
+  selections = {
+    '급식': get_meal(date=20200804),
+    '학사일정': get_schedule(date=20200804),
+    '시간표': get_timetable(date=20200804),
+    'notselected': ''
+  }
+
+  result = 'notselected'
 
   for i in selections:
     if i in text:
       result = i
 
-  if result == '급식':
-    return get_meal()
-  elif result == '학사일정':
-    return get_schedule()
-  elif result == '시간표':
-    return get_timetable(date=20200804)
+  try:
+    return selections[result]
+  except Exception as err:
+    print(err)
+    return '몰랑~'
 
 
 def send_message(recipient_id, response):
