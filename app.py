@@ -47,10 +47,12 @@ def vertify_token(token):
 
 def choice_message(text=""):
   selections = {
-    '급식': get_meal(date=20200804),
-    '학사일정': get_schedule(date=20200804),
-    '시간표': get_timetable(date=20200804),
+    '급식': get_meal(),
+    '학사일정': get_schedule(),
+    '시간표': get_timetable(),
   }
+
+  print(text)
 
   result = ''
 
@@ -114,11 +116,13 @@ def get_timetable(date=None, grade_no=1, class_no=1):
 
   try:
     if date:
-      timetable_info = neis.timeTable(schclass='his', ATPT_OFCDC_SC_CODE=AE, SD_SCHUL_CODE=SE, ALL_TI_YMD=date, GRADE=grade_no, CLASS_NM=class_no)
+      print(AE, SE, date, grade_no, class_no)
+      timetable_info = neis.timeTable(schclass='his', ATPT_OFCDC_SC_CODE=AE, SD_SCHUL_CODE=SE, ALL_TI_YMD=date, GRADE=grade_no, CLRM_NM=class_no)
     else:
-      timetable_info = neis.timeTable(schclass='his', ATPT_OFCDC_SC_CODE=AE, SD_SCHUL_CODE=SE, GRADE=grade_no, CLASS_NM=class_no)
+      timetable_info = neis.timeTable(schclass='his', ATPT_OFCDC_SC_CODE=AE, SD_SCHUL_CODE=SE, GRADE=grade_no, CLRM_NM=class_no)
 
     timetable = [i['ITRT_CNTNT'] for i in timetable_info.data]
+    
     return timetable
   except Exception as err:
     print(err)
