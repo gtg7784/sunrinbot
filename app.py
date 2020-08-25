@@ -122,8 +122,13 @@ def get_timetable(date=None, grade_no=1, class_no=1):
       timetable_info = neis.timeTable(schclass='his', ATPT_OFCDC_SC_CODE=AE, SD_SCHUL_CODE=SE, GRADE=grade_no, CLRM_NM=class_no)
 
     timetable = [i['ITRT_CNTNT'] for i in timetable_info.data]
+
+    result = ''
+
+    for item, index in enumerate(timetable):
+      result += f'{index+1}교시 - {item}\n'
     
-    return timetable
+    return result
   except Exception as err:
     print(err)
     return "해당 날짜의 시간표 정보가 없습니다"
