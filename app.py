@@ -125,7 +125,7 @@ def get_timetable(date=None, grade_no=1, class_no=1):
 
     result = ''
 
-    for item, index in enumerate(timetable):
+    for index, item in enumerate(timetable):
       result += f'{index+1}교시 - {item}\n'
     
     return result
