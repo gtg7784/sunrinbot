@@ -3,3 +3,10 @@ Flask==1.1.2
 pymessenger==0.0.7.0
 selenium==3.141.0
 neispy==2.0.6
+mxnet==1.6.0
+gluonnlp==0.9.1
+sentencepiece==0.1.91
+pandas==1.0.4
+transformers==3.0.2
+pytorch-lightning==0.8.5
+kogpt2==0.1.1

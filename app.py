@@ -84,6 +84,7 @@ def get_meal(date=None):
       meal_info = neis.mealServiceDietInfo(ATPT_OFCDC_SC_CODE=AE, SD_SCHUL_CODE=SE)
 
     meal = meal_info.DDISH_NM.replace('<br/>', '\n')
+    
     return meal
   except Exception as err:
     print(err)
