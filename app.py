@@ -60,8 +60,6 @@ def choice_message(text=""):
     '사용법': get_howtouse(),
   }
 
-  print(text)
-
   result = ''
 
   for i in selections:
@@ -70,8 +68,8 @@ def choice_message(text=""):
 
   try:
     return selections[result]
-  except Exception as err:
-    print(err)
+  except Exception as e:
+    print(f'exception! {e}')
     return chat_with_ai(text)
 
 
@@ -95,8 +93,8 @@ def get_meal(text):
     meal = meal_info.DDISH_NM.replace('<br/>', '\n')
     
     return meal
-  except Exception as err:
-    print(err)
+  except Exception as e:
+    print(f'exception! {e}')
     return "해당 날짜의 급식정보가 없어요 ㅠㅠ"
 
 def get_schedule(text):
@@ -116,8 +114,8 @@ def get_schedule(text):
     schedule = schedule_info.EVENT_NM
 
     return schedule
-  except Exception as err:
-    print(err)
+  except Exception as e:
+    print(f'exception! {e}')
     return "해당 날짜의 학사일정 정보가 없어요 ㅠㅠ"
 
 def get_timetable(text):
@@ -151,8 +149,8 @@ def get_timetable(text):
       result += f'{index+1}교시 - {item}\n'
     
     return result
-  except Exception as err:
-    print(err)
+  except Exception as e:
+    print(f'exception! {e}')
     return "해당 날짜의 시간표 정보가 없어요 ㅠㅠ"
 
 def get_howtouse():
@@ -176,6 +174,8 @@ def get_ymd(text=""):
     month = f"0{text[month_idx]}" if len(text[month_idx]) == 1 else text[month_idx-1:month_idx]
     day = f"0{text[day_idx]}" if len(text[day_idx]) == 1 else text[day_idx-1:day_idx]
     YMD = int(f'{datetime.now().year}{month}{day}')
+
+    print(YMD)
 
     return YMD
   except Exception as e:
