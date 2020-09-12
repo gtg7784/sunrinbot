@@ -32,7 +32,6 @@ EOS = '</s>'
 MASK = '<unused0>'
 SENT = '<unused1>'
 
-
 class CharacterDataset(Dataset):
     def __init__(self, chats, tok_path, vocab, max_len=32):
         self._data = chats

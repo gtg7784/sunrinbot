@@ -1,10 +1,16 @@
 import os
+import argparse
 import neispy
 from flask import Flask, request
 from dotenv import load_dotenv
 from pymessenger.bot import Bot
+from model import KoGPT2Chat
 
 load_dotenv(verbose=True)
+
+parser = argparse.ArgumentParser(description='Ruby based on KoGPT-2')
+parser.add_argument('--model_params', type=str, default='model_chp/model_last.ckpt')
+args = parser.parse_args()
 
 app = Flask(__name__)
 
@@ -64,7 +70,7 @@ def choice_message(text=""):
     return selections[result]
   except Exception as err:
     print(err)
-    return '몰랑~'
+    return chat_with_ai(text)
 
 
 def send_message(recipient_id, response):
@@ -133,6 +139,12 @@ def get_timetable(date=None, grade_no=1, class_no=1):
   except Exception as err:
     print(err)
     return "해당 날짜의 시간표 정보가 없습니다"
+
+def chat_with_ai(text):
+  model = KoGPT2Chat.load_from_checkpoint(args.model_params)
+  response = model.chat(text)
+
+  return response
 
 if __name__ == "__main__":
   app.run(host='0.0.0.0', port=80)
