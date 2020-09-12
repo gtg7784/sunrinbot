@@ -184,7 +184,7 @@ def get_ymd(text=""):
     else:
       D = day_second
 
-    YMD = int(f'{datetime.now().year}{M}{D}')
+    YMD = int(f'{datetime.now().year}{M.zfill(2)}{D.zfill(2)}')
 
     return YMD
   except Exception as e:
