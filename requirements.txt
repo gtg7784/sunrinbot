@@ -9,4 +9,5 @@ sentencepiece==0.1.91
 pandas==1.0.4
 transformers==3.0.2
 pytorch-lightning==0.8.5
+torch
 # kogpt2==0.1.1

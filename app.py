@@ -1,6 +1,7 @@
 import os
 import argparse
 import neispy
+from datetime import datetime
 from flask import Flask, request
 from dotenv import load_dotenv
 from pymessenger.bot import Bot
@@ -53,9 +54,10 @@ def vertify_token(token):
 
 def choice_message(text=""):
   selections = {
-    '급식': get_meal(),
+    '급식': get_meal(text),
     '학사일정': get_schedule(),
     '시간표': get_timetable(),
+    '사용법': get_howtouse(),
   }
 
   print(text)
@@ -77,15 +79,16 @@ def send_message(recipient_id, response):
   bot.send_text_message(recipient_id, response)
   return "success"
 
-def get_meal(date=None):
+def get_meal(text):
   neis = neispy.SyncClient(force=True)
 
   AE = "B10" # 교육청 코드
   SE = 7010536 # 학교 코드
 
   try:
-    if date:
-      meal_info = neis.mealServiceDietInfo(ATPT_OFCDC_SC_CODE=AE, SD_SCHUL_CODE=SE, MLSV_YMD=date)
+    YMD = get_ymd(text)
+    if YMD:
+      meal_info = neis.mealServiceDietInfo(ATPT_OFCDC_SC_CODE=AE, SD_SCHUL_CODE=SE, MLSV_YMD=YMD)
     else:
       meal_info = neis.mealServiceDietInfo(ATPT_OFCDC_SC_CODE=AE, SD_SCHUL_CODE=SE)
 
@@ -94,17 +97,19 @@ def get_meal(date=None):
     return meal
   except Exception as err:
     print(err)
-    return "해당 날짜의 급식정보가 없습니다"
+    return "해당 날짜의 급식정보가 없어요 ㅠㅠ"
 
-def get_schedule(date=None):
+def get_schedule(text):
   neis = neispy.SyncClient(force=True)
 
   AE = "B10" # 교육청 코드
   SE = 7010536 # 학교 코드
 
+  YMD = get_ymd(text)
+
   try:
-    if date:
-      schedule_info = neis.SchoolSchedule(ATPT_OFCDC_SC_CODE=AE, SD_SCHUL_CODE=SE, AA_YMD=date)
+    if YMD:
+      schedule_info = neis.SchoolSchedule(ATPT_OFCDC_SC_CODE=AE, SD_SCHUL_CODE=SE, AA_YMD=YMD)
     else:
       schedule_info = neis.SchoolSchedule(ATPT_OFCDC_SC_CODE=AE, SD_SCHUL_CODE=SE)
 
@@ -113,18 +118,28 @@ def get_schedule(date=None):
     return schedule
   except Exception as err:
     print(err)
-    return "해당 날짜의 학사일정 정보가 없습니다"
+    return "해당 날짜의 학사일정 정보가 없어요 ㅠㅠ"
 
-def get_timetable(date=None, grade_no=1, class_no=1):
+def get_timetable(text):
   neis = neispy.SyncClient(force=True)
 
   AE = "B10" # 교육청 코드
   SE = 7010536 # 학교 코드
 
+  YMD = get_ymd(text)
+
   try:
-    if date:
-      print(AE, SE, date, grade_no, class_no)
-      timetable_info = neis.timeTable(schclass='his', ATPT_OFCDC_SC_CODE=AE, SD_SCHUL_CODE=SE, ALL_TI_YMD=date, GRADE=grade_no, CLRM_NM=class_no)
+    grade_idx = text.index("학년") - 1
+    class_idx = text.index("반") - 1
+    grade_no = int(text[grade_idx])
+    class_no = int(text[class_idx])
+  except Exception as e:
+    print(f'exception! {e}')
+    return "학년 반 정보를 제대로 입력해주세요!"
+
+  try:
+    if YMD:
+      timetable_info = neis.timeTable(schclass='his', ATPT_OFCDC_SC_CODE=AE, SD_SCHUL_CODE=SE, ALL_TI_YMD=YMD, GRADE=grade_no, CLRM_NM=class_no)
     else:
       timetable_info = neis.timeTable(schclass='his', ATPT_OFCDC_SC_CODE=AE, SD_SCHUL_CODE=SE, GRADE=grade_no, CLRM_NM=class_no)
 
@@ -138,7 +153,33 @@ def get_timetable(date=None, grade_no=1, class_no=1):
     return result
   except Exception as err:
     print(err)
-    return "해당 날짜의 시간표 정보가 없습니다"
+    return "해당 날짜의 시간표 정보가 없어요 ㅠㅠ"
+
+def get_howtouse():
+  return """
+  사용법은 다음과 같습니다!\n
+  1. 급식 찾기\n
+  특정 날짜의 급식을 받고싶을 땐 "n월 n일 급식 알려줘" 하면 되고, 오늘 급식은 그냥 "급식 알려줘" 하면 됩니다.\n
+  2. 시간표 찾기\n
+  "n학년 n반 시간표 알려줘" 하면 됩니다.\n
+  특정 날짜의 시간표를 받고 싶을땐, "n월 n일 n학년 n반 시간표 알려줘" 하면 됩니다.\n
+  3. 학사일정 찾기\n
+  특정 날짜의 학사일정을 받고싶을 땐 "n월 n일 학사일정 알려줘" 하면 되고, 오늘 학사일정은 그냥 "학사일정 알려줘" 하면 됩니다.\n
+  """
+
+def get_ymd(text=""):
+  try:
+    month_idx = text.index("월") - 1
+    day_idx = text.index("일") - 1
+    month = f"0{text[month_idx]}" if len(text[month_idx]) == 1 else text[month_idx-1:month_idx]
+    day = f"0{text[day_idx]}" if len(text[day_idx]) == 1 else text[day_idx-1:day_idx]
+    YMD = int(f'{datetime.now().year}{month}{day}')
+
+    return YMD
+  except Exception as e:
+    print(f'exception! {e}')
+    return False
+
 
 def chat_with_ai(text):
   model = KoGPT2Chat.load_from_checkpoint(args.model_params)
