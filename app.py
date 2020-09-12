@@ -169,13 +169,22 @@ def get_howtouse():
 
 def get_ymd(text=""):
   try:
-    month_idx = text.index("월") - 1
-    day_idx = text.index("일") - 1
-    month = f"0{text[month_idx]}" if len(text[month_idx]) == 1 else text[month_idx-1:month_idx]
-    day = f"0{text[day_idx]}" if len(text[day_idx]) == 1 else text[day_idx-1:day_idx]
-    YMD = int(f'{datetime.now().year}{month}{day}')
+    month_first = text[text.index("월") - 2]
+    month_second = text[text.index("월") - 1]
+    day_first = text[text.index("일") - 2]
+    day_second = text[text.index("일") - 1]
 
-    print(YMD)
+    if month_first.isnumeric() and month_second.isnumeric():
+      M = month_first + month_second
+    else:
+      M = month_second
+    
+    if day_first.isnumeric() and day_second.isnumeric():
+      D = day_first + day_second
+    else:
+      D = day_second
+
+    YMD = int(f'{datetime.now().year}{M}{D}')
 
     return YMD
   except Exception as e:
