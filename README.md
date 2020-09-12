@@ -8,7 +8,7 @@ pip install git+https://github.com/SKT-AI/KoGPT2#egg=kogpt2
 
 
 ## 사용법
-[Facebook Page](https://www.facebook.com/%EC%84%A0%EB%A6%B0%EB%B4%87-106002031217684)
+[Facebook Page](https://fb.me/sunrinbot)
 
 페이스북 페이지의 메신져를 통하여 사용해보세요.
 
