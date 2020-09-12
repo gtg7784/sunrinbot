@@ -55,8 +55,8 @@ def vertify_token(token):
 def choice_message(text=""):
   selections = {
     '급식': get_meal(text),
-    '학사일정': get_schedule(),
-    '시간표': get_timetable(),
+    '학사일정': get_schedule(text),
+    '시간표': get_timetable(text),
     '사용법': get_howtouse(),
   }
 
