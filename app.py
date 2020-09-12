@@ -2,7 +2,7 @@ import os
 import argparse
 import neispy
 from datetime import datetime
-from flask import Flask, request
+from flask import Flask, request, render_template
 from dotenv import load_dotenv
 from pymessenger.bot import Bot
 from model import KoGPT2Chat
@@ -45,6 +45,10 @@ def chat():
 @app.route('/test', methods=['GET'])
 def test():
   return "HELLO WORLD"
+
+@app.route('/policy', methods=['GET'])
+def policy():
+  return render_template('policy.html')
 
 def vertify_token(token):
   if token == VERIFY_TOKEN:
