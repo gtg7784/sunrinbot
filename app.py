@@ -23,6 +23,11 @@ bot = Bot(ACCESS_TOKEN)
 
 SCHOOL_NAME = "선린인터넷고등학교"
 
+neis = neispy.SyncClient(force=True)
+
+AE = "B10" # 교육청 코드
+SE = 7010536 # 학교 코드
+
 @app.route('/', methods=['GET', 'POST'])
 def chat():
   if request.method == 'GET':
@@ -87,11 +92,6 @@ def send_message(recipient_id, response):
   return "success"
 
 def get_meal(text):
-  neis = neispy.SyncClient(force=True)
-
-  AE = "B10" # 교육청 코드
-  SE = 7010536 # 학교 코드
-
   YMD = get_ymd(text)
 
   try:
@@ -106,11 +106,6 @@ def get_meal(text):
     return "해당 날짜의 급식정보가 없어요 ㅠㅠ"
 
 def get_schedule(text):
-  neis = neispy.SyncClient(force=True)
-
-  AE = "B10" # 교육청 코드
-  SE = 7010536 # 학교 코드
-
   YMD = get_ymd(text)
 
   try:
@@ -125,11 +120,6 @@ def get_schedule(text):
     return "해당 날짜의 학사일정 정보가 없어요 ㅠㅠ"
 
 def get_timetable(text):
-  neis = neispy.SyncClient(force=True)
-
-  AE = "B10" # 교육청 코드
-  SE = 7010536 # 학교 코드
-
   YMD = get_ymd(text)
 
   try:
