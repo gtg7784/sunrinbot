@@ -28,6 +28,8 @@ neis = neispy.SyncClient(force=True)
 AE = "B10" # 교육청 코드
 SE = 7010536 # 학교 코드
 
+model = KoGPT2Chat.load_from_checkpoint(args.model_params)
+
 @app.route('/', methods=['GET', 'POST'])
 def chat():
   res = ""
@@ -43,8 +45,7 @@ def chat():
           recipient_id = message['sender']['id']
           if message['message'].get('text'):
             text = message['message'].get('text')
-            response_sent_text = "ㅋㅋㅋ"
-            # response_sent_text = choice_message(text)
+            response_sent_text = choice_message(text)
             print(recipient_id, response_sent_text)
             res = send_message(recipient_id, response_sent_text)
           if message['message'].get('attachments'):
@@ -182,7 +183,6 @@ def get_howtouse():
 """
 
 def chat_with_ai(text):
-  model = KoGPT2Chat.load_from_checkpoint(args.model_params)
   response = model.chat(text)
 
   return response
