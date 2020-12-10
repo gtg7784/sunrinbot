@@ -42,12 +42,13 @@ def chat():
           recipient_id = message['sender']['id']
           if message['message'].get('text'):
             text = message['message'].get('text')
-            response_sent_text = choice_message(text)
-            print(response_sent_text)
-            send_message(recipient_id, response_sent_text)
+            response_sent_text = "ㅋㅋㅋ"
+            # response_sent_text = choice_message(text)
+            print(recipient_id, response_sent_text)
+            return send_message(recipient_id, response_sent_text)
           if message['message'].get('attachments'):
             response_sent_nontext = "attach"
-            send_message(recipient_id, response_sent_nontext)
+            return send_message(recipient_id, response_sent_nontext)
   return "Message Processed"
 
 @app.route('/test', methods=['GET'])
