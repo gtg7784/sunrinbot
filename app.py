@@ -72,11 +72,13 @@ def choice_message(text):
   for i in selections:
     if i in text:
       result = i
+  
+  print(result)
 
   try:
     return selections[result]
   except Exception as e:
-    print(f'exception! {e}')
+    print(f'choice_message exception! {e}')
     return chat_with_ai(text)
 
 
@@ -100,7 +102,7 @@ def get_meal(text):
     return meal
 
   except Exception as e:
-    print(f'exception! {e}')
+    print(f'get_meal exception! {e}')
     return "해당 날짜의 급식정보가 없어요 ㅠㅠ"
 
 def get_schedule(text):
@@ -119,7 +121,7 @@ def get_schedule(text):
     return schedule
 
   except Exception as e:
-    print(f'exception! {e}')
+    print(f'get_schedule exception! {e}')
     return "해당 날짜의 학사일정 정보가 없어요 ㅠㅠ"
 
 def get_timetable(text):
@@ -137,7 +139,7 @@ def get_timetable(text):
     class_no = int(text[class_idx])
 
   except Exception as e:
-    print(f'exception! {e}')
+    print(f'학년 반 정보를 제대로 입력해주세요. exception! {e}')
     return "학년 반 정보를 제대로 입력해주세요."
 
   try:
@@ -153,7 +155,7 @@ def get_timetable(text):
     return result
 
   except Exception as e:
-    print(f'exception! {e}')
+    print(f'해당 날짜의 시간표 정보가 없어요 ㅠㅠ exception! {e}')
     return "해당 날짜의 시간표 정보가 없어요 ㅠㅠ"
 
 def get_going(text):
@@ -212,7 +214,7 @@ def get_ymd(text=""):
 
     return YMD
   except Exception as e:
-    print(f'exception! {e}')
+    print(f'get_ymd exception! {e}')
     n = datetime.now(timezone("Asia/Seoul"))
     now = n.strftime("%Y%m%d")
 
