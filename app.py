@@ -30,6 +30,7 @@ SE = 7010536 # 학교 코드
 
 @app.route('/', methods=['GET', 'POST'])
 def chat():
+  res = ""
   if request.method == 'GET':
     token_sent = request.args.get('hub.verify_token')
     return vertify_token(token_sent)
@@ -45,10 +46,12 @@ def chat():
             response_sent_text = "ㅋㅋㅋ"
             # response_sent_text = choice_message(text)
             print(recipient_id, response_sent_text)
-            return send_message(recipient_id, response_sent_text)
+            res = send_message(recipient_id, response_sent_text)
           if message['message'].get('attachments'):
             response_sent_nontext = "attach"
-            return send_message(recipient_id, response_sent_nontext)
+            res = send_message(recipient_id, response_sent_nontext)
+  
+  print(f"API RESPONSE: {res}")
   return "Message Processed"
 
 @app.route('/test', methods=['GET'])
@@ -90,8 +93,7 @@ def choice_message(text):
 
 
 def send_message(recipient_id, response):
-  bot.send_text_message(recipient_id, response)
-  return "success"
+  return bot.send_text_message(recipient_id, response)
 
 def get_meal(text):
   YMD = get_ymd(text)
